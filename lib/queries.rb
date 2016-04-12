@@ -17,6 +17,11 @@ class Query
     end
     counter
   end
+
+  def artist_count
+    artist_array = @db.execute("SELECT artist FROM albums")
+    artist_array.uniq.length
+  end
 end
 
 new_query = Query.new # connects to releases.db
