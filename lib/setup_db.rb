@@ -1,6 +1,7 @@
 require 'sqlite3'
-
+require 'csv'
 class ReleaseDatabase
+  FILE_PATH = 'source/20160406-record-collection.csv'
   attr_reader :db
 
   def initialize(dbname = "releases")
@@ -31,8 +32,23 @@ class ReleaseDatabase
     # one table
   end
 
+  def load!
+    insert_statement = <<-INSERTSTATEMENT
+      INSERT INTO albums (
+        label_code, artist, title, label, format, released, date_added
+      ) VALUES (
+      :label_code, :artist, :title, :label, :format, :released, :date_added
+      );
+    INSERTSTATEMENT
 
+    prepared_statement = @db.prepare(insert_statement)
+
+    CSV.foreach(FILE_PATH, headers: true) do |row|
+      prepared_statement.execute(row.to_h)
+    end
+  end
 end
 
 release_db = ReleaseDatabase.new
 release_db.reset_schema!
+release_db.load!
