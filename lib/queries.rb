@@ -28,6 +28,14 @@ class Query
     earliest_array = earliest_array.drop_while { |album| album[1] <= 0 }
     earliest = earliest_array.min_by { |album| album[1] }
   end
+
+  def latest
+    latest_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added IS NOT NULL")
+    latest = latest_array.max_by { |album| Time.parse([album[1]].to_s) }
+  end
+
+
+
 end
 
 new_query = Query.new # connects to releases.db
