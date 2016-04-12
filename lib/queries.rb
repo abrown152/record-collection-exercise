@@ -23,18 +23,21 @@ class Query
     artist_array.uniq.length
   end
 
-  def earliest
+  def earliest_released
     earliest_array = @db.execute("SELECT artist, released FROM albums WHERE released IS NOT NULL")
     earliest_array = earliest_array.drop_while { |album| album[1] <= 0 }
     earliest = earliest_array.min_by { |album| album[1] }
   end
 
-  def latest
+  def latest_added
     latest_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added IS NOT NULL")
     latest = latest_array.max_by { |album| Time.parse([album[1]].to_s) }
   end
 
-
+  def earliest_added
+    earliest_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added IS NOT NULL")
+    earliest = earliest_array.min_by { |album| Time.parse([album[1]].to_s) }
+  end
 
 end
 
