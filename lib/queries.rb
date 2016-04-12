@@ -43,9 +43,10 @@ class Query
     added_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added LIKE '%#{year}%'")
   end
 
-  def added_in_decade(decade)
-    decade = decade.pop(1)
-    added_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added LIKE '%#{year}%'")
+  def released_in_decade(decade)
+    decade = decade.to_s
+    decade = decade[0..-2].to_i
+    released_array = @db.execute("SELECT artist, released FROM albums WHERE released LIKE '%#{decade}%'")
   end
 
 end
