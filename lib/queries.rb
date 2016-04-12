@@ -22,6 +22,12 @@ class Query
     artist_array = @db.execute("SELECT artist FROM albums")
     artist_array.uniq.length
   end
+
+  def earliest
+    earliest_array = @db.execute("SELECT artist, released FROM albums WHERE released IS NOT NULL")
+    earliest_array = earliest_array.drop_while { |album| album[1] <= 0 }
+    earliest = earliest_array.min_by { |album| album[1] }
+  end
 end
 
 new_query = Query.new # connects to releases.db
