@@ -39,6 +39,10 @@ class Query
     earliest = earliest_array.min_by { |album| Time.parse([album[1]].to_s) }
   end
 
+  def added_in_year(year)
+    added_array = @db.execute("SELECT artist, date_added FROM albums WHERE date_added LIKE '%#{year}%'")
+  end
+
 end
 
 new_query = Query.new # connects to releases.db
